@@ -35,7 +35,7 @@ export default function Navbar() {
                     </Link>
 
                     {/* Desktop Menu */}
-                    <div className="hidden md:flex gap-8 text-white text-2xl xl:text-1xl lg:text-1xl tracking-wider font-medium">
+                    <div className="hidden md:flex gap-8 text-white text-1xl xl:text-1xl lg:text-1xl tracking-wider font-medium">
                         {navItems.map((item) => (
                             <Link
                                 key={item.name}
