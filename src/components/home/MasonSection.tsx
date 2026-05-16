@@ -19,6 +19,7 @@ export default function MasonSection() {
                             height={600}
                             className="w-full h-auto object-cover"
                             priority
+                            unoptimized
                         />
                     </div>
 
