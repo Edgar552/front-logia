@@ -13,7 +13,7 @@ export default function MasonSection() {
                     {/* Imagen izquierda */}
                     <div className="relative">
                         <Image
-                            src="/images/chronos_bg.png"
+                            src="/images/chronos_bg.jpg"
                             alt="Masonería"
                             width={900}
                             height={600}
