@@ -12,7 +12,7 @@ export default function HeroSection() {
                 </h1>
 
                 <h2 className="text-3xl xl:text-6xl lg:text-4xl  font-bold uppercase mt-2">
-                    Soberano e Independiente
+                    Soberana e Independiente
                 </h2>
 
                 <p className="text-4xl xl:text-6xl lg:text-4xl  mt-4 text-gray-300">
