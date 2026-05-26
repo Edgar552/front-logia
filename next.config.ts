@@ -1,20 +1,22 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  reactStrictMode: true,
 
+const nextConfig: NextConfig = {
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
+        protocol: "http",
+        hostname: "localhost",
+        port: "8000",
+      },
+
+      {
         protocol: "https",
-        hostname: "api.midominio.com",
-      }
-    ]
+        hostname: "api.granlogiadelpotosi.com",
+      },
+    ],
   },
-
-  poweredByHeader: false,
-
-  compress: true
 };
 
 export default nextConfig;

@@ -1,73 +1,120 @@
 import Image from "next/image";
+import Link from "next/link";
+import { getNews } from "@/services/new.services";
+import { formatDate } from '@/lib/date';
 
-export default function NoticiasPage() {
+export default async function NoticiasPage() {
+
+    const news = await getNews();
+
     return (
-        <section className="min-h-screen bg-white text-black py-20 px-6 md:px-12">
+        <section className="min-h-screen bg-[#f5f5f3] py-24 px-6 md:px-12">
+
             <div className="max-w-6xl mx-auto">
 
                 {/* Header */}
-                <div className="text-center mb-16">
-                    <h1 className="font-[family-name:var(--font-cinzel)] text-4xl md:text-6xl uppercase mb-4">
-                        Noticias
+                <div className="mb-16">
+
+                    <h1 className="font-[family-name:var(--font-cinzel)] text-5xl md:text-6xl uppercase tracking-wide">
+                        Noticias | Eventos
                     </h1>
 
-                    <p className="text-gray-600 text-lg">
-                        Mantente informado sobre nuestros eventos y actividades.
-                    </p>
+                    <div className="w-32 h-[2px] bg-black mt-6" />
                 </div>
 
-                {/* Featured News */}
-                <div className="grid md:grid-cols-2 gap-10 items-center">
+                {/* List */}
+                <div className="space-y-10">
 
-                    {/* Imagen */}
-                    <div className="relative w-full h-[800px] overflow-hidden rounded-lg">
-                        <Image
-                            src="/images/noticias/museo.jpg"
-                            alt="Museo Paulino N. Guerrero"
-                            fill
-                            className="object-cover hover:scale-105 transition duration-500"
-                        />
-                    </div>
+                    {news.map((item: any) => (
 
-                    {/* Content */}
-                    <div>
-                        <span className="text-sm uppercase tracking-widest text-yellow-700 font-semibold">
-                            Evento Cultural
-                        </span>
+                        <Link
+                            key={item.id}
+                            href={`/noticias/${item.slug}`}
+                            className="group block"
+                        >
+                            <article
+                                className="
+                                    bg-white
+                                    border
+                                    border-gray-200
+                                    overflow-hidden
+                                    transition-all
+                                    duration-500
+                                    hover:shadow-2xl
+                                    hover:-translate-y-1
+                                "
+                            >
+                                <div className="grid md:grid-cols-[320px_1fr]">
 
-                        <h2 className="font-[family-name:var(--font-cinzel)] text-3xl md:text-5xl mt-4 mb-6 leading-tight">
-                            Inauguración del Museo Paulino N. Guerrero
-                        </h2>
+                                    {/* Imagen */}
+                                    <div className="relative h-[240px] md:h-full overflow-hidden">
 
-                        <p className="text-gray-700 leading-relaxed mb-6">
-                            La historia, el arte y la memoria encuentran un nuevo hogar.
-                        </p>
+                                        <Image
+                                            src={`${process.env.NEXT_PUBLIC_STORAGE_URL}/${item.cover}`}
+                                            alt={item.title}
+                                            fill
+                                            className="
+                                                object-cover
+                                                transition-transform
+                                                duration-700
+                                                group-hover:scale-105
+                                            "
+                                        />
+                                    </div>
 
-                        <p className="text-gray-700 leading-relaxed mb-6">
-                            Tenemos el honor de invitarle a la inauguración del
-                            Museo Paulino N. Guerrero, un espacio dedicado a preservar
-                            y compartir el legado cultural que nos inspira.
-                        </p>
+                                    {/* Content */}
+                                    <div className="p-8 md:p-10 flex flex-col justify-center">
 
-                        <div className="space-y-3 text-gray-800">
-                            <p>
-                                <strong>Ubicación:</strong> Calle Manuel José Othón #335,
-                                San Luis Potosí
-                            </p>
+                                        {/* Fecha */}
+                                        <span className="text-sm tracking-[0.25em] uppercase text-gray-500 mb-4">
+                                             {formatDate(item.published_at)}
+                                        </span>
 
-                            <p>
-                                <strong>Fecha:</strong> 18 de mayo de 2026
-                            </p>
+                                        {/* Title */}
+                                        <h2
+                                            className="
+                                                text-3xl
+                                                md:text-4xl
+                                                font-[family-name:var(--font-cinzel)]
+                                                leading-tight
+                                                mb-6
+                                                transition-colors
+                                                duration-300
+                                                group-hover:text-yellow-700
+                                            "
+                                        >
+                                            {item.title}
+                                        </h2>
 
-                            <p>
-                                <strong>Hora:</strong> 19:00 hrs
-                            </p>
-                        </div>
+                                        {/* Excerpt */}
+                                        <p className="text-gray-600 leading-relaxed text-lg">
+                                            {item.excerpt}
+                                        </p>
 
-                        <div className="mt-8 border-l-4 border-yellow-700 pl-5 italic text-gray-600">
-                            Será un placer contar con su presencia en esta noche especial.
-                        </div>
-                    </div>
+                                        {/* CTA */}
+                                        <div className="mt-8">
+
+                                            <span
+                                                className="
+                                                    inline-flex
+                                                    items-center
+                                                    gap-3
+                                                    uppercase
+                                                    tracking-[0.2em]
+                                                    text-sm
+                                                    border-b
+                                                    border-black
+                                                    pb-1
+                                                "
+                                            >
+                                                Leer noticia
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        </Link>
+                    ))}
                 </div>
             </div>
         </section>
