@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
-
+import {sendContact} from "@/services/contact.service";
+import Swal from "sweetalert2";
 export default function ContactPage() {
     const [formData, setFormData] = useState({
         nombre: "",
         telefono: "",
+        email: "",
         mensaje: "",
     });
 
@@ -18,16 +20,56 @@ export default function ContactPage() {
         });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+
         e.preventDefault();
 
-        console.log(formData);
+        if (loading) return;
 
-        alert("Formulario enviado (solo frontend por ahora)");
+        try {
+
+            setLoading(true);
+
+            await sendContact(formData);
+
+            await Swal.fire({
+                icon: "success",
+                title: "Mensaje enviado",
+                text: "Gracias por ponerte en contacto con nosotros. Hemos recibido tu mensaje correctamente.",
+                confirmButtonText: "Aceptar",
+                confirmButtonColor: "#c8a76a",
+                background: "#111111",
+                color: "#ffffff",
+            });
+
+            setFormData({
+                nombre: "",
+                telefono: "",
+                email: "",
+                mensaje: "",
+            });
+
+        } catch (error) {
+
+            await Swal.fire({
+                icon: "error",
+                title: "No fue posible enviar el mensaje",
+                text: "Ocurrió un problema al intentar enviar tu solicitud. Por favor intenta nuevamente más tarde.",
+                confirmButtonText: "Entendido",
+                confirmButtonColor: "#c8a76a",
+                background: "#111111",
+                color: "#ffffff",
+            });
+
+        } finally {
+
+            setLoading(false);
+        }
     };
-
     return (
-        <section className="min-h-screen bg-black text-white py-20 px-6 md:px-12">
+        <section className="min-h-screen bg-black text-white py-20 px-6 md:px-12" style={{backgroundImage: "url('/images/athenas.jpg')"}}>
             <div className="max-w-4xl mx-auto">
 
                 {/* Header */}
@@ -80,6 +122,23 @@ export default function ContactPage() {
                         />
                     </div>
 
+
+                    <div>
+                        <label className="block mb-3 text-sm tracking-widest uppercase text-gray-300">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            placeholder="Ingresa tu Email"
+                            className="w-full bg-transparent border border-gray-600 px-4 py-3 focus:outline-none focus:border-yellow-500 transition"
+                            required
+                        />
+                    </div>
+
                     {/* Mensaje */}
                     <div>
                         <label className="block mb-3 text-sm tracking-widest uppercase text-gray-300">
@@ -90,7 +149,7 @@ export default function ContactPage() {
                             name="mensaje"
                             value={formData.mensaje}
                             onChange={handleChange}
-                            placeholder="Escribe tu mensaje"
+                            placeholder="Escribe cual es tu inter&eacute;s y/o duda sobre la Gran Logia El Potosi"
                             rows={6}
                             className="w-full bg-transparent border border-gray-600 px-4 py-3 focus:outline-none focus:border-yellow-500 transition resize-none"
                             required
@@ -99,11 +158,27 @@ export default function ContactPage() {
 
                     {/* Button */}
                     <div className="text-center">
-                        <button disabled
+                        <button  disabled={loading}
                             type="submit"
-                            className="border border-white px-10 py-3 uppercase tracking-widest hover:bg-white hover:text-black transition duration-300"
+                            className="border
+                                    border-white
+                                    px-10
+                                    py-3
+                                    uppercase
+                                    tracking-widest
+                                    transition
+                                    duration-300
+
+                                    hover:bg-white
+                                    hover:text-black
+
+                                    disabled:opacity-50
+                                    disabled:cursor-not-allowed
+                                    disabled:hover:bg-transparent
+                                    disabled:hover:text-white
+                                "
                         >
-                            Enviar mensaje
+                            {loading ? "Enviando..." : "Enviar mensaje"}
                         </button>
                     </div>
                 </form>
