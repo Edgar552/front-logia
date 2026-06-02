@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {useState } from "react";
 import Swal from "sweetalert2";
 import { sendContact } from "@/services/contact.service";
 
-export default function ContactWelcomeModal() {
-
-    const [open, setOpen] = useState(false);
+interface ContactModalProps {
+    open: boolean;
+    onClose: () => void;
+}
+export default function ContactModal({open,onClose}: ContactModalProps){
 
     const [loading, setLoading] = useState(false);
 
@@ -16,42 +18,6 @@ export default function ContactWelcomeModal() {
         email: "",
         mensaje: "",
     });
-
-    useEffect(() => {
-
-        const lastSeen = localStorage.getItem("welcome_contact_modal");
-        const now = Date.now();
-
-        const Days = 2 * 24 * 60 * 60 * 1000;
-
-        if (!lastSeen || now - Number(lastSeen) > Days) {
-
-            const timer = setTimeout(() => {
-
-                setOpen(true);
-
-                localStorage.setItem(
-                    "welcome_contact_modal",
-                    now.toString()
-                );
-
-            }, 1200);
-
-            return () => clearTimeout(timer);
-        }
-
-    }, []);
-
-    useEffect(() => {
-
-        document.body.style.overflow = open ? "hidden" : "auto";
-
-        return () => {
-            document.body.style.overflow = "auto";
-        };
-
-    }, [open]);
-
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
@@ -63,7 +29,7 @@ export default function ContactWelcomeModal() {
     };
 
     const handleClose = () => {
-        setOpen(false);
+        onClose();
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -78,7 +44,7 @@ export default function ContactWelcomeModal() {
 
             await sendContact(formData);
 
-            setOpen(false);
+            onClose();
 
             await Swal.fire({
                 icon: "success",
@@ -119,14 +85,36 @@ export default function ContactWelcomeModal() {
 
     return (
 
-        <div className="fixed inset-0 z-[9999] overflow-y-auto bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div  className="
+            fixed
+            z-[9999]
 
-            <div className="relative w-full max-w-2xl bg-[#111111]
-                    border
-                    border-white/10
-                    rounded-2xl
-                    overflow-y-auto
+            bottom-24
+            left-4
+            right-4
+
+            md:left-auto
+            md:right-6
+            md:bottom-24
+
+            md:w-[420px]
+
+            animate-in
+            fade-in
+            slide-in-from-bottom-5
+            duration-300">
+
+            <div className="
+                    bg-[#111111]
+                    rounded-3xl
                     shadow-2xl
+                    overflow-hidden
+
+                    h-auto
+
+                    max-h-[70vh]
+                    md:max-h-[700px]
+
                     animate-in
                     fade-in
                     zoom-in-95
@@ -142,69 +130,71 @@ export default function ContactWelcomeModal() {
                         text-white/70
                         hover:text-white
                         transition
-                        z-20
-                    "
-                >
-                    ✕
+                        z-20">
+                    X
                 </button>
 
                 {/* Background */}
-                <div
-                    className="absolute inset-0 opacity-20 bg-cover bg-center"
-                    style={{
-                        backgroundImage: "url('/images/athenas.jpg')",
-                    }}
-                />
+                {/*<div*/}
+                {/*    className="absolute inset-0 opacity-20 bg-cover bg-center"*/}
+                {/*    style={{*/}
+                {/*        backgroundImage: "url('/images/athenas.jpg')",*/}
+                {/*    }}*/}
+                {/*/>*/}
 
-                <div className="relative z-10 p-8 md:p-10 text-white">
+                <div className="
+                        relative
+                        z-10
+
+                        overflow-y-auto
+
+                        max-h-[70vh]
+                        md:max-h-[700px]
+
+                        p-5
+                        md:p-8
+
+                        text-white">
 
                     {/* Header */}
                     <div className="text-center mb-8">
 
-                        <h2 className="
-                            font-[family-name:var(--font-cinzel)]
-                            text-3xl
-                            md:text-5xl
+                        <h2 className="font-[family-name:var(--font-cinzel)]
+                            text-xl
+                            md:text-2xl
                             uppercase
-                            mb-4
-                        ">
+                            mb-4">
                             Contacto
                         </h2>
 
-                        <p className="text-gray-300">
-                            Ponte en contacto con nosotros para resolver tus dudas.
-                        </p>
+                        {/*<p className="text-gray-300">*/}
+                        {/*    Ponte en contacto con nosotros para resolver tus dudas.*/}
+                        {/*</p>*/}
 
                     </div>
 
                     {/* Form */}
-                    <form
-                        onSubmit={handleSubmit}
-                        className="space-y-6"
-                    >
+                    <form onSubmit={handleSubmit}
+                        className="space-y-6">
 
                         {/* Nombre */}
                         <div>
 
-                            <label className="
-                                block
+                            <label className="block
                                 mb-3
                                 text-sm
                                 tracking-widest
                                 uppercase
-                                text-gray-300
-                            ">
+                                text-gray-300">
                                 Nombre
                             </label>
 
-                            <input
-                                type="text"
+                            <input type="text"
                                 name="nombre"
                                 value={formData.nombre}
                                 onChange={handleChange}
                                 placeholder="Ingresa tu nombre"
-                                className="
-                                    w-full
+                                className="w-full
                                     bg-transparent
                                     border
                                     border-gray-600
@@ -212,35 +202,26 @@ export default function ContactWelcomeModal() {
                                     py-3
                                     focus:outline-none
                                     focus:border-yellow-500
-                                    transition
-                                "
-                                required
-                            />
+                                    transition" required/>
 
                         </div>
 
                         {/* Telefono */}
                         <div>
-
-                            <label className="
-                                block
+                            <label className="block
                                 mb-3
                                 text-sm
                                 tracking-widest
                                 uppercase
-                                text-gray-300
-                            ">
-                                Teléfono
+                                text-gray-300">Teléfono
                             </label>
 
-                            <input
-                                type="tel"
+                            <input type="tel"
                                 name="telefono"
                                 value={formData.telefono}
                                 onChange={handleChange}
                                 placeholder="Ingresa tu teléfono"
-                                className="
-                                    w-full
+                                className="w-full
                                     bg-transparent
                                     border
                                     border-gray-600
@@ -248,35 +229,26 @@ export default function ContactWelcomeModal() {
                                     py-3
                                     focus:outline-none
                                     focus:border-yellow-500
-                                    transition
-                                "
-                                required
-                            />
-
+                                    transition" required/>
                         </div>
 
                         {/* Email */}
                         <div>
-
-                            <label className="
-                                block
+                            <label className="block
                                 mb-3
                                 text-sm
                                 tracking-widest
                                 uppercase
-                                text-gray-300
-                            ">
+                                text-gray-300">
                                 Email
                             </label>
 
-                            <input
-                                type="email"
+                            <input type="email"
                                 name="email"
                                 value={formData.email}
                                 onChange={handleChange}
                                 placeholder="Ingresa tu Email"
-                                className="
-                                    w-full
+                                className="w-full
                                     bg-transparent
                                     border
                                     border-gray-600
@@ -285,34 +257,27 @@ export default function ContactWelcomeModal() {
                                     focus:outline-none
                                     focus:border-yellow-500
                                     transition
-                                "
-                                required
-                            />
-
+                                "required/>
                         </div>
 
                         {/* Mensaje */}
                         <div>
 
-                            <label className="
-                                block
+                            <label className="block
                                 mb-3
                                 text-sm
                                 tracking-widest
                                 uppercase
-                                text-gray-300
-                            ">
+                                text-gray-300">
                                 Mensaje
                             </label>
 
-                            <textarea
-                                name="mensaje"
+                            <textarea name="mensaje"
                                 value={formData.mensaje}
                                 onChange={handleChange}
                                 placeholder="Escribe cual es tu interés y/o duda sobre la Gran Logia El Potosi"
-                                rows={5}
-                                className="
-                                    w-full
+                                rows={3}
+                                className="w-full
                                     bg-transparent
                                     border
                                     border-gray-600
@@ -321,18 +286,14 @@ export default function ContactWelcomeModal() {
                                     focus:outline-none
                                     focus:border-yellow-500
                                     transition
-                                    resize-none
-                                "
-                                required
-                            />
+                                    resize-none" required/>
 
                         </div>
 
                         {/* Button */}
                         <div className="pt-2">
 
-                            <button
-                                disabled={loading}
+                            <button disabled={loading}
                                 type="submit"
                                 className="
                                     w-full
@@ -351,9 +312,7 @@ export default function ContactWelcomeModal() {
                                     disabled:opacity-50
                                     disabled:cursor-not-allowed
                                     disabled:hover:bg-transparent
-                                    disabled:hover:text-white
-                                "
-                            >
+                                    disabled:hover:text-white">
                                 {loading ? "Enviando..." : "Enviar mensaje"}
                             </button>
 
@@ -362,7 +321,6 @@ export default function ContactWelcomeModal() {
                     </form>
 
                 </div>
-
             </div>
 
         </div>
