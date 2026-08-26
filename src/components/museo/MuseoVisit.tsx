@@ -17,7 +17,6 @@ export default function MuseoVisit() {
 
                     <div className="w-24 h-[2px] bg-black mx-auto mt-8 mb-10" />
 
-                    {/* TODO: agregar horarios, ubicación y detalles de la visita */}
                     <p className="text-lg text-gray-700 leading-relaxed">
                         Conoce de cerca la historia y el simbolismo de nuestra
                         institución. Agenda tu visita o contáctanos para más información.

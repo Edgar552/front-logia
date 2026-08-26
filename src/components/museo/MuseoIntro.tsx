@@ -16,7 +16,6 @@ export default function MuseoIntro() {
 
                     <div className="w-24 h-[2px] bg-black mx-auto mt-8 mb-10" />
 
-                    {/* TODO: reemplazar con la introducción real del museo */}
                     <p className="text-lg text-gray-700 leading-[2] text-justify">
                         El Museo Masónico de la Gran Logia "El Potosí" resguarda una
                         colección de objetos, documentos y símbolos que dan testimonio
