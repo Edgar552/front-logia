@@ -8,6 +8,7 @@ import { Menu, X } from "lucide-react";
 const navItems = [
     { name: "INICIO", href: "/" },
     { name: "NOSOTROS", href: "/nosotros" },
+    { name: "MUSEO MASÓNICO", href: "/museo" },
     { name: "NOTICIAS", href: "/noticias" },
     { name: "LOGIAS", href: "/logias" },
     { name: "CONTACTO", href: "/contacto" },
