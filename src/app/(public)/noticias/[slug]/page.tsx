@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { Metadata } from "next";
 import {formatDate} from "@/lib/date";
 
 async function getNewsDetail(slug: string) {
@@ -17,6 +18,41 @@ async function getNewsDetail(slug: string) {
     return response.json();
 }
 
+function stripHtml(html?: string) {
+    return html ? html.replace(/<[^>]*>/g, "").trim() : undefined;
+}
+
+export async function generateMetadata({
+                                            params,
+                                        }: {
+    params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+
+    const { slug } = await params;
+
+    try {
+        const news = await getNewsDetail(slug);
+        const description = stripHtml(news.content)?.slice(0, 160);
+        const image = news.cover
+            ? `${process.env.NEXT_PUBLIC_STORAGE_URL}/${news.cover}`
+            : undefined;
+
+        return {
+            title: news.title,
+            description,
+            openGraph: {
+                title: news.title,
+                description,
+                images: image ? [image] : undefined,
+            },
+        };
+    } catch {
+        return {
+            title: "Noticia no encontrada",
+        };
+    }
+}
+
 export default async function NewsDetailPage({
                                                  params,
                                              }: {
@@ -33,9 +69,9 @@ export default async function NewsDetailPage({
 
                 {/* Header */}
                 <div className="text-center mb-16">
-                    <h1 className="font-[family-name:var(--font-cinzel)] text-4xl md:text-6xl uppercase mb-4">
+                    <h2 className="font-[family-name:var(--font-cinzel)] text-4xl md:text-6xl uppercase mb-4">
                         Noticias
-                    </h1>
+                    </h2>
 
                     <p className="text-gray-600 text-lg">
                         Mantente informado sobre nuestros eventos y actividades.
@@ -61,9 +97,9 @@ export default async function NewsDetailPage({
                             Evento
                         </span>
 
-                        <h2 className="font-[family-name:var(--font-cinzel)] text-3xl md:text-5xl mt-4 mb-6 leading-tight">
+                        <h1 className="font-[family-name:var(--font-cinzel)] text-3xl md:text-5xl mt-4 mb-6 leading-tight">
                             {news.title}
-                        </h2>
+                        </h1>
 
                         <p className="text-gray-700 leading-relaxed mb-6"
 

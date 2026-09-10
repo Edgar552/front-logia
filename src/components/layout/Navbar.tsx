@@ -3,19 +3,25 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 
 const navItems = [
     { name: "INICIO", href: "/" },
     { name: "NOSOTROS", href: "/nosotros" },
+    { name: "135 ANIVERSARIO", href: "/aniversario" },
     { name: "MUSEO MASÓNICO", href: "/museo" },
     { name: "NOTICIAS", href: "/noticias" },
-    { name: "LOGIAS", href: "/logias" },
+    // { name: "LOGIAS", href: "/logias" },
     { name: "CONTACTO", href: "/contacto" },
 ];
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+    const pathname = usePathname();
+
+    const isActive = (href: string) =>
+        href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
 
     return (
         <>
@@ -41,7 +47,11 @@ export default function Navbar() {
                             <Link
                                 key={item.name}
                                 href={item.href}
-                                className="hover:text-yellow-400 transition"
+                                className={`transition underline-offset-4 ${
+                                    isActive(item.href)
+                                        ? "text-[#c8a76a] underline"
+                                        : "hover:text-yellow-400"
+                                }`}
                             >
                                 {item.name}
                             </Link>
@@ -97,7 +107,11 @@ export default function Navbar() {
                             key={item.name}
                             href={item.href}
                             onClick={() => setIsOpen(false)}
-                            className="text-white text-xl font-medium tracking-wider border-b border-gray-800 pb-3 hover:text-yellow-400 transition"
+                            className={`text-xl font-medium tracking-wider border-b border-gray-800 pb-3 transition underline-offset-4 ${
+                                isActive(item.href)
+                                    ? "text-[#c8a76a] underline"
+                                    : "text-white hover:text-yellow-400"
+                            }`}
                         >
                             {item.name}
                         </Link>

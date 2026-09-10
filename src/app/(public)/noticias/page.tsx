@@ -1,7 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 import { getNews } from "@/services/new.services";
 import { formatDate } from '@/lib/date';
+
+export const metadata: Metadata = {
+    title: "Noticias y Eventos",
+    description:
+        'Mantente informado sobre las noticias, eventos y actividades de la Gran Logia del Estado Soberano e Independiente "El Potosí".',
+};
 
 export default async function NoticiasPage() {
 

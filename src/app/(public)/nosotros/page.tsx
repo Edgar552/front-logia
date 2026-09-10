@@ -1,5 +1,12 @@
 // import UnderConstruction from "@/components/common/UnderConstruction";
 import Image from "next/image";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Nosotros",
+    description:
+        'Conoce la historia, tradición y filosofía de la Gran Logia del Estado Soberano e Independiente "El Potosí", institución masónica fundada en 1891 en San Luis Potosí.',
+};
 
 export default function NosotrosPage() {
     // return <UnderConstruction />;
@@ -16,9 +23,9 @@ export default function NosotrosPage() {
                         Institución • Tradición • Fraternidad
                     </span>
 
-                    <h2 className="mt-6 text-5xl md:text-7xl leading-tight uppercase font-[family-name:var(--font-cinzel)]">
+                    <h1 className="mt-6 text-5xl md:text-7xl leading-tight uppercase font-[family-name:var(--font-cinzel)]">
                         Nosotros
-                    </h2>
+                    </h1>
 
                     <div className="w-32 h-[2px] bg-black mx-auto mt-8" />
 
