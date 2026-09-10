@@ -10,6 +10,11 @@ export const metadata: Metadata = {
         'Mantente informado sobre las noticias, eventos y actividades de la Gran Logia del Estado Soberano e Independiente "El Potosí".',
 };
 
+// Revalida el contenido cada 60s en el servidor; entre medio, la página
+// se sirve desde caché y la navegación del lado del cliente no vuelve a
+// mostrar el skeleton de carga al reingresar a esta sección.
+export const revalidate = 60;
+
 export default async function NoticiasPage() {
 
     const news = await getNews();

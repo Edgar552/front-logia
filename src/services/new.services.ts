@@ -26,7 +26,11 @@ export async function getNews(): Promise<NewsItem[]> {
             `${apiUrl}/news`,
             {
                 method: 'GET',
-                cache: 'no-store',
+                // Se cachea y revalida cada 60s en vez de "no-store": así la
+                // ruta /noticias deja de ser 100% dinámica y el navegador
+                // puede reutilizar la página ya cargada al volver a entrar
+                // (sin repetir el fetch ni mostrar el skeleton otra vez).
+                next: { revalidate: 60 },
                 signal: controller.signal,
                 headers: {
                     Accept: 'application/json',
